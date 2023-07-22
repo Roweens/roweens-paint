@@ -1,0 +1,6 @@
+.canvas {
+    height: calc(100vh - (var(--navbar-height) + var(--toolbar-height)));
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

@@ -1,0 +1,38 @@
+module.exports = {
+    root: true,
+    env: { browser: true, es2021: true },
+    extends: [
+        'plugin:react/recommended',
+        'airbnb',
+        'prettier',
+        'plugin:react-hooks/recommended',
+    ],
+    parser: '@typescript-eslint/parser',
+    parserOptions: {
+        ecmaVersion: 'latest',
+        sourceType: 'module',
+        tsconfigRootDir: __dirname,
+    },
+    plugins: ['react-refresh', 'react', '@typescript-eslint', 'react-hooks'],
+    rules: {
+        'react-refresh/only-export-components': [
+            'warn',
+            { allowConstantExport: true },
+        ],
+        '@typescript-eslint/no-non-null-assertion': 'off',
+        'import/no-unresolved': 'off',
+        'import/no-absolute-path': 'off',
+        'import/no-extraneous-dependencies': 'off',
+        'import/prefer-default-export': 'off',
+        'react/require-default-props': 'off',
+        'react/jsx-filename-extension': [1, { extensions: ['.jsx', '.tsx'] }],
+        'react/react-in-jsx-scope': 'off',
+        'no-shadow': 'off',
+        'import/extensions': 'off',
+        'no-unused-vars': 'off',
+        'prefer-const': 'warn',
+        'prefer-destructuring': 'warn',
+        'no-underscore-dangle': 'off',
+        'no-undef': 'off',
+    },
+};
