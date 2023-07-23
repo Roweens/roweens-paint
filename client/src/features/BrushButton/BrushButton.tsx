@@ -22,9 +22,9 @@ export const BrushButton = memo((props: BrushButtonProps) => {
 
     const onBrushButtonClick = useCallback(() => {
         if (canvas && socket) {
+            setTool(new Brush(canvas, socket, sessionId));
             setFillColor('black');
             setStrokeColor('black');
-            setTool(new Brush(canvas, socket, sessionId));
         }
     }, [canvas, sessionId, setFillColor, setStrokeColor, setTool, socket]);
 

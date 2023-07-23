@@ -17,7 +17,10 @@ export const DrawingControls = memo((props: DrawingControlsProps) => {
     const setLineWidth = useBoundStore((state) => state.setLineWidth);
     const setStrokeColor = useBoundStore((state) => state.setStrokeColor);
     const setFillColor = useBoundStore((state) => state.setFillColor);
-    const tool = useBoundStore((state) => state.tool);
+
+    const lineWidth = useBoundStore((state) => state.lineWidth);
+    const fillColor = useBoundStore((state) => state.fillColor);
+    const strokeColor = useBoundStore((state) => state.strokeColor);
 
     const onLineWidthChange = useCallback(
         (value: number | null) => {
@@ -36,7 +39,6 @@ export const DrawingControls = memo((props: DrawingControlsProps) => {
         },
         [setStrokeColor],
     );
-
     const onFillColorChange = useCallback(
         (value: Color, hex: string) => {
             if (value) {
@@ -46,8 +48,9 @@ export const DrawingControls = memo((props: DrawingControlsProps) => {
         [setFillColor],
     );
 
-    const debouncedOnStrokeColorChange = useDebounce(onStrokeColorChange, 100);
-    const debouncedOnFillColorChange = useDebounce(onFillColorChange, 100);
+    const debouncedOnFillColorChange = useDebounce(onFillColorChange, 350);
+
+    const debouncedOnStrokeColorChange = useDebounce(onStrokeColorChange, 350);
 
     return (
         <Space className={classNames(cls.drawingControls, {}, [className])}>
@@ -57,19 +60,19 @@ export const DrawingControls = memo((props: DrawingControlsProps) => {
                 max={50}
                 defaultValue={1}
                 onChange={onLineWidthChange}
-                value={tool?.ctx?.lineWidth}
+                value={lineWidth}
             />
             <ColorPicker
                 text="Цвет обводки"
                 onChange={debouncedOnStrokeColorChange}
                 defaultValue="black"
-                value={tool?.strokeColor}
+                value={strokeColor}
             />
             <ColorPicker
                 text="Цвет заливки"
                 onChange={debouncedOnFillColorChange}
                 defaultValue="black"
-                value={tool?.fillColor}
+                value={fillColor}
             />
         </Space>
     );
