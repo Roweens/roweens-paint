@@ -17,12 +17,14 @@ export const CircleButton = memo((props: CircleButtonProps) => {
 
     const canvas = useBoundStore((state) => state.canvas);
     const setTool = useBoundStore((state) => state.setTool);
+    const socket = useBoundStore((state) => state.socket);
+    const sessionId = useBoundStore((state) => state.sessionId);
 
     const onCircleButtonClick = useCallback(() => {
-        if (canvas) {
-            setTool(new Circle(canvas));
+        if (canvas && socket) {
+            setTool(new Circle(canvas, socket, sessionId));
         }
-    }, [canvas, setTool]);
+    }, [canvas, sessionId, setTool, socket]);
 
     return (
         <Button

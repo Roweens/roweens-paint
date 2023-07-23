@@ -17,12 +17,14 @@ export const EraserButton = memo((props: EraserButtonProps) => {
 
     const canvas = useBoundStore((state) => state.canvas);
     const setTool = useBoundStore((state) => state.setTool);
+    const socket = useBoundStore((state) => state.socket);
+    const sessionId = useBoundStore((state) => state.sessionId);
 
     const onEraserButtonClick = useCallback(() => {
-        if (canvas) {
-            setTool(new Eraser(canvas));
+        if (canvas && socket) {
+            setTool(new Eraser(canvas, socket, sessionId));
         }
-    }, [canvas, setTool]);
+    }, [canvas, sessionId, setTool, socket]);
 
     return (
         <Button

@@ -1,4 +1,6 @@
 import { StateCreator } from 'zustand';
+import { MessageMethod } from 'types/wsMessage';
+import { useBoundStore } from './store';
 
 // @ts-ignore
 // eslint-disable-next-line no-extend-native
@@ -11,8 +13,10 @@ export interface CanvasSlice {
     undoList: string[];
     redoList: string[];
     setCanvas: (canvas: HTMLCanvasElement | null) => void;
-    setUndoList: (data: string) => void;
-    setRedoList: (data: string) => void;
+    pushToUndoList: (data: string) => void;
+    pushToRedoList: (data: string) => void;
+    setUndoList: (data: string[]) => void;
+    setRedoList: (data: string[]) => void;
     undo: () => void;
     redo: () => void;
 }
@@ -27,16 +31,38 @@ export const createCanvasSlice: StateCreator<
     undoList: [],
     redoList: [],
     setCanvas: (canvas) => set(() => ({ canvas })),
-    setUndoList: (data) =>
+    pushToUndoList: (data) =>
         set((state) => ({ undoList: [...state.undoList, data] })),
-    setRedoList: (data) =>
+    pushToRedoList: (data) =>
         set((state) => ({ redoList: [...state.redoList, data] })),
+    setUndoList: (data) =>
+        set(() => ({
+            undoList: data,
+        })),
+    setRedoList: (data) =>
+        set(() => ({
+            redoList: data,
+        })),
     undo: () => {
-        const { undoList, canvas } = get();
+        const { undoList, canvas, redoList } = get();
         let ctx = canvas?.getContext('2d');
 
         if (undoList.length > 0 && canvas) {
             let dataUrl = undoList.pop();
+
+            const socket = useBoundStore.getState().socket;
+            const sessionId = useBoundStore.getState().sessionId;
+
+            socket?.send(
+                JSON.stringify({
+                    method: MessageMethod.UNDO,
+                    id: sessionId,
+                    dataUrl,
+                    redoList: [...redoList, canvas.toDataURL()],
+                    undoList: undoList.filter((url) => url !== dataUrl),
+                }),
+            );
+
             set((state) => ({
                 undoList: state.undoList.filter((url) => url !== dataUrl),
             }));
@@ -54,11 +80,25 @@ export const createCanvasSlice: StateCreator<
         }
     },
     redo: () => {
-        const { redoList, canvas } = get();
+        const { redoList, canvas, undoList } = get();
         let ctx = canvas?.getContext('2d');
 
         if (redoList.length > 0 && canvas) {
             let dataUrl = redoList.pop();
+
+            const socket = useBoundStore.getState().socket;
+            const sessionId = useBoundStore.getState().sessionId;
+
+            socket?.send(
+                JSON.stringify({
+                    method: MessageMethod.REDO,
+                    id: sessionId,
+                    dataUrl,
+                    redoList: redoList.filter((url) => url !== dataUrl),
+                    undoList: [...undoList, canvas.toDataURL()],
+                }),
+            );
+
             set((state) => ({
                 redoList: state.redoList.filter((url) => url !== dataUrl),
             }));

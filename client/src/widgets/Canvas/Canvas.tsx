@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import { useBoundStore } from 'store/store';
 import { useParams } from 'react-router-dom';
 import { useWebsocket } from 'hooks/useWebsocket';
+import { $api } from 'api/api';
 import cls from './Canvas.module.scss';
 
 interface CanvasProps {
@@ -20,15 +21,43 @@ export const Canvas = memo((props: CanvasProps) => {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
     const setCanvas = useBoundStore((state) => state.setCanvas);
-    const setUndoList = useBoundStore((state) => state.setUndoList);
+    const pushToUndoList = useBoundStore((state) => state.pushToUndoList);
 
     useEffect(() => {
         setCanvas(canvasRef.current);
-    }, [setCanvas]);
+        let ctx = canvasRef.current?.getContext('2d');
+        $api.get(`/canvas/`, {
+            params: {
+                id,
+            },
+        }).then((response) => {
+            const img = new Image();
+            img.src = response.data;
+            img.onload = () => {
+                ctx?.clearRect(
+                    0,
+                    0,
+                    canvasRef.current?.width as number,
+                    canvasRef.current?.height as number,
+                );
+                ctx?.drawImage(
+                    img,
+                    0,
+                    0,
+                    canvasRef.current?.width as number,
+                    canvasRef.current?.height as number,
+                );
+            };
+        });
+    }, [id, setCanvas]);
 
     const onCanvasMouseDown = useCallback(() => {
-        setUndoList(canvasRef.current?.toDataURL() as string);
-    }, [setUndoList]);
+        pushToUndoList(canvasRef.current?.toDataURL() as string);
+        $api.post('/canvas/', {
+            img: canvasRef.current?.toDataURL(),
+            id,
+        });
+    }, [id, pushToUndoList]);
 
     useWebsocket(canvasRef.current as HTMLCanvasElement, id as string);
 

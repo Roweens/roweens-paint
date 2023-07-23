@@ -17,12 +17,14 @@ export const SquareButton = memo((props: SquareButtonProps) => {
 
     const canvas = useBoundStore((state) => state.canvas);
     const setTool = useBoundStore((state) => state.setTool);
+    const socket = useBoundStore((state) => state.socket);
+    const sessionId = useBoundStore((state) => state.sessionId);
 
     const onSquareButtonClick = useCallback(() => {
-        if (canvas) {
-            setTool(new Rectangle(canvas));
+        if (canvas && socket) {
+            setTool(new Rectangle(canvas, socket, sessionId));
         }
-    }, [canvas, setTool]);
+    }, [canvas, sessionId, setTool, socket]);
 
     return (
         <Button

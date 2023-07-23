@@ -45,6 +45,7 @@ export const LoginModal = memo((props: LoginModalProps) => {
             open={isModalOpen}
             onOk={onConnectionHandler}
             onCancel={handleCancel}
+            maskClosable={false}
             footer={[
                 <Button
                     key="submit"

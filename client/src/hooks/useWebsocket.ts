@@ -1,7 +1,17 @@
 import { useEffect } from 'react';
 import { useBoundStore } from 'store/store';
 import Brush from 'tools/Brush';
-import { FigureType, MessageMethod, wsMessage } from 'types/wsMessage';
+import Circle from 'tools/Circle';
+import Eraser from 'tools/Eraser';
+import Line from 'tools/Line';
+import Rectangle from 'tools/Rectangle';
+import {
+    DrawMessage,
+    FigureType,
+    MessageMethod,
+    UndoRedoMessage,
+    wsMessage,
+} from 'types/wsMessage';
 
 export const useWebsocket = (canvas: HTMLCanvasElement, id: string) => {
     const username = useBoundStore((state) => state.username);
@@ -9,13 +19,66 @@ export const useWebsocket = (canvas: HTMLCanvasElement, id: string) => {
     const setSocket = useBoundStore((state) => state.setSocket);
     const setSessionId = useBoundStore((state) => state.setSessionId);
     const setTool = useBoundStore((state) => state.setTool);
+    const setUndoList = useBoundStore((state) => state.setUndoList);
+    const setRedoList = useBoundStore((state) => state.setRedoList);
 
-    const drawHandler = (msg: wsMessage) => {
+    const drawHandler = (msg: DrawMessage) => {
         const { figure } = msg;
         const ctx = canvas?.getContext('2d');
         switch (figure.type) {
             case FigureType.BRUSH:
-                Brush.draw(ctx, figure.x, figure.y);
+                Brush.draw(
+                    ctx,
+                    figure.x,
+                    figure.y,
+                    figure.color,
+                    figure.stroke,
+                    figure.lineWidth,
+                );
+                break;
+            case FigureType.RECTANGLE:
+                Rectangle.staticDraw(
+                    ctx,
+                    figure.x,
+                    figure.y,
+                    figure.width,
+                    figure.height,
+                    figure.color,
+                    figure.stroke,
+                    figure.lineWidth,
+                );
+                break;
+            case FigureType.CIRCLE:
+                Circle.staticDraw(
+                    ctx,
+                    figure.x,
+                    figure.y,
+                    figure.radius,
+                    figure.color,
+                    figure.stroke,
+                    figure.lineWidth,
+                );
+                break;
+            case FigureType.LINE:
+                Line.draw(
+                    ctx,
+                    figure.x,
+                    figure.y,
+                    figure.startX,
+                    figure.startY,
+                    figure.color,
+                    figure.stroke,
+                    figure.lineWidth,
+                );
+                break;
+            case FigureType.ERASER:
+                Eraser.draw(
+                    ctx,
+                    figure.x,
+                    figure.y,
+                    figure.color,
+                    figure.lineWidth,
+                );
                 break;
             case FigureType.FINISH:
                 ctx?.beginPath();
@@ -23,6 +86,29 @@ export const useWebsocket = (canvas: HTMLCanvasElement, id: string) => {
             default:
                 break;
         }
+    };
+
+    const undoRedoHandler = (msg: UndoRedoMessage) => {
+        const ctx = canvas?.getContext('2d');
+        const img = new Image();
+        img.src = msg.dataUrl;
+        img.onload = () => {
+            ctx?.clearRect(
+                0,
+                0,
+                canvas.width as number,
+                canvas.height as number,
+            );
+            ctx?.drawImage(
+                img,
+                0,
+                0,
+                canvas.width as number,
+                canvas.height as number,
+            );
+        };
+        setRedoList(msg.redoList);
+        setUndoList(msg.undoList);
     };
 
     useEffect(() => {
@@ -49,6 +135,12 @@ export const useWebsocket = (canvas: HTMLCanvasElement, id: string) => {
                         break;
                     case MessageMethod.DRAW:
                         drawHandler(msg);
+                        break;
+                    case MessageMethod.UNDO:
+                        undoRedoHandler(msg);
+                        break;
+                    case MessageMethod.REDO:
+                        undoRedoHandler(msg);
                         break;
                     default:
                         break;

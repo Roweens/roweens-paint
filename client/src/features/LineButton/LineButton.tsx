@@ -17,12 +17,14 @@ export const LineButton = memo((props: LineButtonProps) => {
 
     const canvas = useBoundStore((state) => state.canvas);
     const setTool = useBoundStore((state) => state.setTool);
+    const socket = useBoundStore((state) => state.socket);
+    const sessionId = useBoundStore((state) => state.sessionId);
 
     const onLineButtonClick = useCallback(() => {
-        if (canvas) {
-            setTool(new Line(canvas));
+        if (canvas && socket) {
+            setTool(new Line(canvas, socket, sessionId));
         }
-    }, [canvas, setTool]);
+    }, [canvas, sessionId, setTool, socket]);
 
     return (
         <Button

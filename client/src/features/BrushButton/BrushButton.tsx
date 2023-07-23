@@ -18,12 +18,14 @@ export const BrushButton = memo((props: BrushButtonProps) => {
 
     const canvas = useBoundStore((state) => state.canvas);
     const setTool = useBoundStore((state) => state.setTool);
+    const socket = useBoundStore((state) => state.socket);
+    const sessionId = useBoundStore((state) => state.sessionId);
 
     const onBrushButtonClick = useCallback(() => {
-        if (canvas) {
-            setTool(new Brush(canvas));
+        if (canvas && socket) {
+            setTool(new Brush(canvas, socket, sessionId));
         }
-    }, [canvas, setTool]);
+    }, [canvas, sessionId, setTool, socket]);
 
     return (
         <Button

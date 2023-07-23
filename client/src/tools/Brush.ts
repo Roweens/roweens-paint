@@ -1,4 +1,3 @@
-import { MouseEvent } from 'react';
 import { FigureType, MessageMethod } from 'types/wsMessage';
 import Tool from './Tool';
 
@@ -17,7 +16,7 @@ export default class Brush extends Tool {
         this.canvas.onmouseup = this.mouseUpHander.bind(this);
     }
 
-    mouseUpHander(e: MouseEvent<HTMLCanvasElement>) {
+    mouseUpHander(e: globalThis.MouseEvent) {
         this.mouseDown = false;
         this.socket.send(
             JSON.stringify({
@@ -25,14 +24,12 @@ export default class Brush extends Tool {
                 id: this.id,
                 figure: {
                     type: FigureType.FINISH,
-                    x: e.pageX - (e.target as HTMLElement).offsetLeft,
-                    y: e.pageY - (e.target as HTMLElement).offsetTop,
                 },
             }),
         );
     }
 
-    mouseDownHander(e: MouseEvent<HTMLCanvasElement>) {
+    mouseDownHander(e: globalThis.MouseEvent) {
         this.mouseDown = true;
         this.ctx?.beginPath();
         this.ctx?.moveTo(
@@ -41,7 +38,7 @@ export default class Brush extends Tool {
         );
     }
 
-    mouseMoveHander(e: MouseEvent<HTMLCanvasElement>) {
+    mouseMoveHander(e: globalThis.MouseEvent) {
         if (this.mouseDown) {
             this.socket.send(
                 JSON.stringify({
@@ -51,14 +48,29 @@ export default class Brush extends Tool {
                         type: FigureType.BRUSH,
                         x: e.pageX - (e.target as HTMLElement).offsetLeft,
                         y: e.pageY - (e.target as HTMLElement).offsetTop,
+                        color: this.ctx?.fillStyle,
+                        stroke: this.ctx?.strokeStyle,
+                        lineWidth: this.ctx?.lineWidth,
                     },
                 }),
             );
         }
     }
 
-    static draw(ctx: CanvasRenderingContext2D | null, x: number, y: number) {
-        ctx?.lineTo(x, y);
-        ctx?.stroke();
+    static draw(
+        ctx: CanvasRenderingContext2D | null,
+        x: number,
+        y: number,
+        color: string,
+        stroke: string,
+        lineWidth: number,
+    ) {
+        if (ctx) {
+            ctx.fillStyle = color;
+            ctx.strokeStyle = stroke;
+            ctx.lineWidth = lineWidth;
+            ctx?.lineTo(x, y);
+            ctx?.stroke();
+        }
     }
 }

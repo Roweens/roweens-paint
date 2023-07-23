@@ -1,4 +1,4 @@
-import { MouseEvent } from 'react';
+import { FigureType, MessageMethod } from 'types/wsMessage';
 import Tool from './Tool';
 
 export default class Line extends Tool {
@@ -10,12 +10,18 @@ export default class Line extends Tool {
 
     saved: string;
 
-    constructor(canvas: HTMLCanvasElement) {
-        super(canvas);
+    currentX: number;
+
+    currentY: number;
+
+    constructor(canvas: HTMLCanvasElement, socket: WebSocket, id: string) {
+        super(canvas, socket, id);
         this.mouseDown = false;
         this.listen();
         this.startX = 0;
         this.startY = 0;
+        this.currentX = 0;
+        this.currentY = 0;
         this.saved = '';
     }
 
@@ -25,11 +31,27 @@ export default class Line extends Tool {
         this.canvas.onmouseup = this.mouseUpHander.bind(this);
     }
 
-    mouseUpHander(e: MouseEvent<HTMLCanvasElement>) {
+    mouseUpHander(e: globalThis.MouseEvent) {
         this.mouseDown = false;
+        this.socket.send(
+            JSON.stringify({
+                method: MessageMethod.DRAW,
+                id: this.id,
+                figure: {
+                    type: FigureType.LINE,
+                    x: this.currentX,
+                    y: this.currentY,
+                    startX: this.startX,
+                    startY: this.startY,
+                    color: this.ctx?.fillStyle,
+                    stroke: this.ctx?.strokeStyle,
+                    lineWidth: this.ctx?.lineWidth,
+                },
+            }),
+        );
     }
 
-    mouseDownHander(e: MouseEvent<HTMLCanvasElement>) {
+    mouseDownHander(e: globalThis.MouseEvent) {
         this.mouseDown = true;
         this.startX = e.pageX - (e.target as HTMLElement).offsetLeft;
         this.startY = e.pageY - (e.target as HTMLElement).offsetTop;
@@ -41,11 +63,14 @@ export default class Line extends Tool {
         this.saved = this.canvas.toDataURL();
     }
 
-    mouseMoveHander(e: MouseEvent<HTMLCanvasElement>) {
+    mouseMoveHander(e: globalThis.MouseEvent) {
         if (this.mouseDown) {
-            let currentX = e.pageX - (e.target as HTMLElement).offsetLeft;
-            let currentY = e.pageY - (e.target as HTMLElement).offsetTop;
-            this.draw(currentX, currentY);
+            this.currentX = e.pageX - (e.target as HTMLElement).offsetLeft;
+            this.currentY = e.pageY - (e.target as HTMLElement).offsetTop;
+            this.draw(
+                e.pageX - (e.target as HTMLElement).offsetLeft,
+                e.pageY - (e.target as HTMLElement).offsetTop,
+            );
         }
     }
 
@@ -66,5 +91,26 @@ export default class Line extends Tool {
             this.ctx?.lineTo(x, y);
             this.ctx?.stroke();
         };
+    }
+
+    static draw(
+        ctx: CanvasRenderingContext2D | null,
+        x: number,
+        y: number,
+        startX: number,
+        startY: number,
+        color: string,
+        stroke: string,
+        lineWidth: number,
+    ) {
+        if (ctx) {
+            ctx.fillStyle = color;
+            ctx.strokeStyle = stroke;
+            ctx.lineWidth = lineWidth;
+            ctx.beginPath();
+            ctx?.moveTo(startX, startY);
+            ctx?.lineTo(x, y);
+            ctx?.stroke();
+        }
     }
 }

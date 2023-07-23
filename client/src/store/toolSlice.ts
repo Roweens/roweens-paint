@@ -21,7 +21,6 @@ export const createToolSlice: StateCreator<ToolSlice, [], [], ToolSlice> = (
     tool: null,
     setTool: (tool: ToolType) => set(() => ({ tool })),
     setLineWidth: (width: number) => {
-        console.log('action', width);
         const tool = get().tool;
         if (tool) {
             tool.lineWidth = width;

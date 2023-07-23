@@ -27,7 +27,7 @@ export const Navbar = memo((props: NavbarProps) => {
     return (
         <Header className={classNames(cls.navbar, {}, [className])}>
             <Row justify="space-between">
-                <Col span={12}>
+                <Col span={18}>
                     <Title level={1} className={cls.title}>
                         Roweens paint
                     </Title>
@@ -37,7 +37,7 @@ export const Navbar = memo((props: NavbarProps) => {
                     <CircleButton />
                     <EraserButton />
                 </Col>
-                <Col span={12} className={cls.rightCol}>
+                <Col span={6} className={cls.rightCol}>
                     <UndoButton />
                     <RedoButton />
                     <SaveButton />
