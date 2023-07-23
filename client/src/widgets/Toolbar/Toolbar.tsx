@@ -2,7 +2,7 @@ import { memo } from 'react';
 import classNames from 'classnames';
 import { DrawingControls } from 'features/DrawingControls/DrawingControls';
 import { Space } from 'antd';
-import cls from './Toolbar.module.scss';
+import cls from './ToolBar.module.scss';
 
 interface ToolbarProps {
     className?: string;
