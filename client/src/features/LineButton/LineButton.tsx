@@ -17,12 +17,16 @@ export const LineButton = memo((props: LineButtonProps) => {
     const setTool = useBoundStore((state) => state.setTool);
     const socket = useBoundStore((state) => state.socket);
     const sessionId = useBoundStore((state) => state.sessionId);
+    const setFillColor = useBoundStore((state) => state.setFillColor);
+    const setStrokeColor = useBoundStore((state) => state.setStrokeColor);
 
     const onLineButtonClick = useCallback(() => {
         if (canvas && socket) {
+            setFillColor('black');
+            setStrokeColor('black');
             setTool(new Line(canvas, socket, sessionId));
         }
-    }, [canvas, sessionId, setTool, socket]);
+    }, [canvas, sessionId, setFillColor, setStrokeColor, setTool, socket]);
 
     return (
         <Tooltip title="Линия">

@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useBoundStore } from 'store/store';
 import Brush from 'tools/Brush';
 import Circle from 'tools/Circle';
+import Eraser from 'tools/Eraser';
 import Line from 'tools/Line';
 import Rectangle from 'tools/Rectangle';
 import {
@@ -71,14 +72,7 @@ export const useWebsocket = (canvas: HTMLCanvasElement, id: string) => {
                 );
                 break;
             case FigureType.ERASER:
-                Brush.draw(
-                    ctx,
-                    figure.x,
-                    figure.y,
-                    'white',
-                    'white',
-                    figure.lineWidth,
-                );
+                Eraser.draw(ctx, figure.x, figure.y, figure.lineWidth);
                 break;
             case FigureType.FINISH:
                 ctx?.beginPath();

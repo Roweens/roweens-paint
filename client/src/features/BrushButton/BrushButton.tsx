@@ -1,6 +1,5 @@
 import { memo, useCallback } from 'react';
 import classNames from 'classnames';
-// import cls from './BrushButton.module.scss';
 import { ReactComponent as BrushIcon } from 'assets/brush.svg';
 import { Button, Tooltip } from 'antd';
 import { AppIcon } from 'components/AppIcon';
@@ -18,12 +17,16 @@ export const BrushButton = memo((props: BrushButtonProps) => {
     const setTool = useBoundStore((state) => state.setTool);
     const socket = useBoundStore((state) => state.socket);
     const sessionId = useBoundStore((state) => state.sessionId);
+    const setFillColor = useBoundStore((state) => state.setFillColor);
+    const setStrokeColor = useBoundStore((state) => state.setStrokeColor);
 
     const onBrushButtonClick = useCallback(() => {
         if (canvas && socket) {
+            setFillColor('black');
+            setStrokeColor('black');
             setTool(new Brush(canvas, socket, sessionId));
         }
-    }, [canvas, sessionId, setTool, socket]);
+    }, [canvas, sessionId, setFillColor, setStrokeColor, setTool, socket]);
 
     return (
         <Tooltip title="Кисть">

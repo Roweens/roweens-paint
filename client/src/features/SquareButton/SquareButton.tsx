@@ -15,14 +15,19 @@ export const SquareButton = memo((props: SquareButtonProps) => {
 
     const canvas = useBoundStore((state) => state.canvas);
     const setTool = useBoundStore((state) => state.setTool);
+    const setFillColor = useBoundStore((state) => state.setFillColor);
+    const setStrokeColor = useBoundStore((state) => state.setStrokeColor);
+
     const socket = useBoundStore((state) => state.socket);
     const sessionId = useBoundStore((state) => state.sessionId);
 
     const onSquareButtonClick = useCallback(() => {
         if (canvas && socket) {
+            setFillColor('black');
+            setStrokeColor('black');
             setTool(new Rectangle(canvas, socket, sessionId));
         }
-    }, [canvas, sessionId, setTool, socket]);
+    }, [canvas, sessionId, setFillColor, setStrokeColor, setTool, socket]);
 
     return (
         <Tooltip title="Квадрат">

@@ -8,10 +8,11 @@ interface ColorPickerProps {
     text?: string;
     onChange: (value: Color, hex: string) => void;
     defaultValue?: string | Color;
+    value?: string;
 }
 
 export const ColorPicker = memo((props: ColorPickerProps) => {
-    const { className, text, onChange, defaultValue } = props;
+    const { className, text, onChange, defaultValue, value } = props;
 
     return (
         <ColorPickerComponent
@@ -19,6 +20,7 @@ export const ColorPicker = memo((props: ColorPickerProps) => {
             defaultValue={defaultValue}
             size="large"
             onChange={onChange}
+            value={value}
             showText={
                 text
                     ? (color) => (

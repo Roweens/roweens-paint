@@ -49,6 +49,15 @@ export default class Rectangle extends Tool {
                 },
             }),
         );
+        this.socket.send(
+            JSON.stringify({
+                method: MessageMethod.DRAW,
+                id: this.id,
+                figure: {
+                    type: FigureType.FINISH,
+                },
+            }),
+        );
     }
 
     mouseDownHander(e: globalThis.MouseEvent) {
