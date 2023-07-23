@@ -6,7 +6,6 @@ import { SquareButton } from 'features/SquareButton/SquareButton';
 import { LineButton } from 'features/LineButton/LineButton';
 import { CircleButton } from 'features/CircleButton/CircleButton';
 import { EraserButton } from 'features/EraserButton/EraserButton';
-import { ColorPicker } from 'features/ColorPicker/ColorPicker';
 import { SaveButton } from 'features/SaveButton/SaveButton';
 import { UndoButton } from 'features/UndoButton/UndoButton';
 import { RedoButton } from 'features/RedoButton/RedoButton';

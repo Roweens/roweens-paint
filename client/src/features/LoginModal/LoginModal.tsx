@@ -3,13 +3,7 @@ import { Button, Input, Modal } from 'antd';
 import { useThrottle } from 'hooks/useThrottle';
 import { useBoundStore } from 'store/store';
 
-interface LoginModalProps {
-    className?: string;
-}
-
-export const LoginModal = memo((props: LoginModalProps) => {
-    const { className } = props;
-
+export const LoginModal = memo(() => {
     const [isModalOpen, setIsModalOpen] = useState(true);
     const [validationError, setValidationError] = useState(false);
 

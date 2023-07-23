@@ -15,10 +15,10 @@ export default defineConfig(({ mode }) => {
         define: {
             __HTTP_API_URL__: process.env.VITE_IS_DEV
                 ? JSON.stringify('http://localhost:3000/api/')
-                : JSON.stringify('http://production-url.com'),
+                : JSON.stringify('https://roweens-canvas.onrender.com/'),
             __WS_API_URL__: process.env.VITE_IS_DEV
                 ? JSON.stringify('ws://localhost:3000/')
-                : JSON.stringify('ws://production-url.com'),
+                : JSON.stringify('ws://roweens-canvas.onrender.com'),
         },
     };
 });

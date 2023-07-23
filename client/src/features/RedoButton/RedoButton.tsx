@@ -15,7 +15,6 @@ export const RedoButton = memo((props: RedoButtonProps) => {
     const redoList = useBoundStore((state) => state.redoList);
     const isListEmpty = Boolean(!redoList.length);
     const redo = useBoundStore((state) => state.redo);
-    const undoList = useBoundStore((state) => state.undoList);
 
     const onRedoHandle = useCallback(() => {
         redo();

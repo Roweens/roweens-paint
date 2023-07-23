@@ -31,7 +31,7 @@ export default class Rectangle extends Tool {
         this.canvas.onmouseup = this.mouseUpHander.bind(this);
     }
 
-    mouseUpHander(e: globalThis.MouseEvent) {
+    mouseUpHander() {
         this.mouseDown = false;
         this.socket.send(
             JSON.stringify({

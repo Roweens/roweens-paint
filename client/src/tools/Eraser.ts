@@ -31,20 +31,4 @@ export default class Eraser extends Brush {
             this.ctx.stroke();
         }
     }
-
-    static draw(
-        ctx: CanvasRenderingContext2D | null,
-        x: number,
-        y: number,
-        color: string,
-        lineWidth: number,
-    ) {
-        if (ctx) {
-            ctx.strokeStyle = 'white';
-            ctx.fillStyle = color;
-            ctx.lineWidth = lineWidth;
-            ctx.lineTo(x, y);
-            ctx.stroke();
-        }
-    }
 }

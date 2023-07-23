@@ -4,6 +4,10 @@ const path = require('path');
 class CanvasController {
     async getCanvas(req, res, next) {
         try {
+            if (!req.query.id) {
+                return res.status(500).json('no id');
+            }
+
             const filePath = path.resolve(__dirname, '..', 'files', `${req.query.id}.jpg`);
 
             if (fs.existsSync(filePath)) {
