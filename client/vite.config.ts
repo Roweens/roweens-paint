@@ -15,7 +15,7 @@ export default defineConfig(({ mode }) => {
         define: {
             __HTTP_API_URL__: process.env.VITE_IS_DEV
                 ? JSON.stringify('http://localhost:3000/api/')
-                : JSON.stringify('https://roweens-canvas.onrender.com/'),
+                : JSON.stringify('https://roweens-canvas.onrender.com/api/'),
             __WS_API_URL__: process.env.VITE_IS_DEV
                 ? JSON.stringify('wss://localhost:3000/')
                 : JSON.stringify('wss://roweens-canvas.onrender.com'),
