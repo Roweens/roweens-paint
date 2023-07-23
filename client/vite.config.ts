@@ -17,8 +17,8 @@ export default defineConfig(({ mode }) => {
                 ? JSON.stringify('http://localhost:3000/api/')
                 : JSON.stringify('https://roweens-canvas.onrender.com/'),
             __WS_API_URL__: process.env.VITE_IS_DEV
-                ? JSON.stringify('ws://localhost:3000/')
-                : JSON.stringify('ws://roweens-canvas.onrender.com'),
+                ? JSON.stringify('wss://localhost:3000/')
+                : JSON.stringify('wss://roweens-canvas.onrender.com'),
         },
     };
 });
