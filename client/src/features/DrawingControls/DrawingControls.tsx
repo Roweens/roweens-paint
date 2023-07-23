@@ -1,5 +1,4 @@
 import { memo, useCallback } from 'react';
-import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
 import { ColorPicker } from 'features/ColorPicker/ColorPicker';
 import { InputNumber, Space } from 'antd';
@@ -14,7 +13,6 @@ interface DrawingControlsProps {
 
 export const DrawingControls = memo((props: DrawingControlsProps) => {
     const { className } = props;
-    const { t } = useTranslation();
 
     const setLineWidth = useBoundStore((state) => state.setLineWidth);
     const setStrokeColor = useBoundStore((state) => state.setStrokeColor);

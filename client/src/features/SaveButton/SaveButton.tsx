@@ -1,8 +1,7 @@
 import { memo, useCallback } from 'react';
-import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
 import { ReactComponent as SaveIcon } from 'assets/save.svg';
-import { Button } from 'antd';
+import { Button, Tooltip } from 'antd';
 import { AppIcon } from 'components/AppIcon';
 import { useBoundStore } from 'store/store';
 
@@ -12,7 +11,7 @@ interface SaveButtonProps {
 
 export const SaveButton = memo((props: SaveButtonProps) => {
     const { className } = props;
-    const { t } = useTranslation();
+
     const canvas = useBoundStore((state) => state.canvas);
     const sessionId = useBoundStore((state) => state.sessionId);
 
@@ -27,13 +26,15 @@ export const SaveButton = memo((props: SaveButtonProps) => {
     }, [canvas, sessionId]);
 
     return (
-        <Button
-            type="text"
-            className={classNames('', {}, [className])}
-            style={{ height: 'fit-content' }}
-            onClick={onDownloadHandle}
-        >
-            <AppIcon Svg={SaveIcon} stroke size="40px" />
-        </Button>
+        <Tooltip title="Сохранить на ПК">
+            <Button
+                type="text"
+                className={classNames('', {}, [className])}
+                style={{ height: 'fit-content' }}
+                onClick={onDownloadHandle}
+            >
+                <AppIcon Svg={SaveIcon} stroke size="40px" />
+            </Button>
+        </Tooltip>
     );
 });

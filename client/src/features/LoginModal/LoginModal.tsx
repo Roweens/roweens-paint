@@ -1,5 +1,4 @@
 import { ChangeEvent, memo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { Button, Input, Modal } from 'antd';
 import { useThrottle } from 'hooks/useThrottle';
 import { useBoundStore } from 'store/store';
@@ -10,7 +9,6 @@ interface LoginModalProps {
 
 export const LoginModal = memo((props: LoginModalProps) => {
     const { className } = props;
-    const { t } = useTranslation();
 
     const [isModalOpen, setIsModalOpen] = useState(true);
     const [validationError, setValidationError] = useState(false);

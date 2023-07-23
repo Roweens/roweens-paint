@@ -1,5 +1,4 @@
 import { memo } from 'react';
-import { useTranslation } from 'react-i18next';
 import { Layout, Typography, Col, Row } from 'antd';
 import classNames from 'classnames';
 import { BrushButton } from 'features/BrushButton/BrushButton';
@@ -22,7 +21,6 @@ const { Title } = Typography;
 
 export const Navbar = memo((props: NavbarProps) => {
     const { className } = props;
-    const { t } = useTranslation();
 
     return (
         <Header className={classNames(cls.navbar, {}, [className])}>

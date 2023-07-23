@@ -1,8 +1,7 @@
 import { memo, useCallback } from 'react';
-import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
 import { ReactComponent as CircleIcon } from 'assets/circle.svg';
-import { Button } from 'antd';
+import { Button, Tooltip } from 'antd';
 import { AppIcon } from 'components/AppIcon';
 import { useBoundStore } from 'store/store';
 import Circle from 'tools/Circle';
@@ -13,7 +12,6 @@ interface CircleButtonProps {
 
 export const CircleButton = memo((props: CircleButtonProps) => {
     const { className } = props;
-    const { t } = useTranslation();
 
     const canvas = useBoundStore((state) => state.canvas);
     const setTool = useBoundStore((state) => state.setTool);
@@ -27,13 +25,15 @@ export const CircleButton = memo((props: CircleButtonProps) => {
     }, [canvas, sessionId, setTool, socket]);
 
     return (
-        <Button
-            type="text"
-            className={classNames('', {}, [className])}
-            style={{ height: 'fit-content' }}
-            onClick={onCircleButtonClick}
-        >
-            <AppIcon Svg={CircleIcon} stroke size="50px" fill />
-        </Button>
+        <Tooltip title="Окружность">
+            <Button
+                type="text"
+                className={classNames('', {}, [className])}
+                style={{ height: 'fit-content' }}
+                onClick={onCircleButtonClick}
+            >
+                <AppIcon Svg={CircleIcon} stroke size="50px" fill />
+            </Button>
+        </Tooltip>
     );
 });

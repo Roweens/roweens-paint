@@ -1,8 +1,7 @@
 import { memo, useCallback } from 'react';
-import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
 import { ReactComponent as RedoIcon } from 'assets/redo.svg';
-import { Button } from 'antd';
+import { Button, Tooltip } from 'antd';
 import { AppIcon } from 'components/AppIcon';
 import { useBoundStore } from 'store/store';
 
@@ -12,7 +11,6 @@ interface RedoButtonProps {
 
 export const RedoButton = memo((props: RedoButtonProps) => {
     const { className } = props;
-    const { t } = useTranslation();
 
     const redoList = useBoundStore((state) => state.redoList);
     const isListEmpty = Boolean(!redoList.length);
@@ -24,14 +22,21 @@ export const RedoButton = memo((props: RedoButtonProps) => {
     }, [redo]);
 
     return (
-        <Button
-            type="text"
-            className={classNames('', {}, [className])}
-            style={{ height: 'fit-content' }}
-            disabled={isListEmpty}
-            onClick={onRedoHandle}
-        >
-            <AppIcon Svg={RedoIcon} stroke size="50px" disabled={isListEmpty} />
-        </Button>
+        <Tooltip title="Вернуть действие">
+            <Button
+                type="text"
+                className={classNames('', {}, [className])}
+                style={{ height: 'fit-content' }}
+                disabled={isListEmpty}
+                onClick={onRedoHandle}
+            >
+                <AppIcon
+                    Svg={RedoIcon}
+                    stroke
+                    size="50px"
+                    disabled={isListEmpty}
+                />
+            </Button>
+        </Tooltip>
     );
 });

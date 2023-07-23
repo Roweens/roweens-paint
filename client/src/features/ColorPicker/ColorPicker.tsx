@@ -1,5 +1,4 @@
 import { memo } from 'react';
-import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
 import { ColorPicker as ColorPickerComponent } from 'antd';
 import { Color } from 'antd/es/color-picker';
@@ -13,7 +12,6 @@ interface ColorPickerProps {
 
 export const ColorPicker = memo((props: ColorPickerProps) => {
     const { className, text, onChange, defaultValue } = props;
-    const { t } = useTranslation();
 
     return (
         <ColorPickerComponent
